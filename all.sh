@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Directorio de las imágenes en Windows accesible desde Ubuntu (WSL)
 INPUT_DIR="/mnt/c/Users/laura/Downloads/images"
 # Carpeta temporal para archivos binarios
@@ -7,13 +5,6 @@ TEMP_DIR="./temp"
 
 # Asegúrate de que el directorio temporal existe
 mkdir -p ${TEMP_DIR}
-
-# Compilar el archivo C (solo se compila una vez)
-gcc -fopenmp -o paralelismo1 paralelismo1.c
-if [ $? -ne 0 ]; then
-  echo "Error al compilar paralelismo1.c"
-  exit 1
-fi
 
 # Procesar cada archivo JPG en el directorio
 for INPUT_JPG in ${INPUT_DIR}/*.jpg; do
@@ -30,11 +21,10 @@ for INPUT_JPG in ${INPUT_DIR}/*.jpg; do
   python3 fromPNG2Bin.py "${PNG_FILE}"
 
   # Ejecutar el programa C con el archivo binario
-  ./filtro_imagen "${TEMP_FILE}"
+  ./main "${TEMP_FILE}"
 
   # Convertir el archivo binario de salida a PNG
   python3 fromBin2PNG.py "${TEMP_FILE}.new"
 
   echo "Finalizado ${INPUT_JPG}"
 done
-
